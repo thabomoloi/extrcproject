@@ -46,7 +46,6 @@
     <build>
         <sourceDirectory>apps/server/src/main/java</sourceDirectory>
         <testSourceDirectory>apps/server/src/test/java</testSourceDirectory>
-        <!-- Optional: If you have resources, specify their location -->
         <resources>
             <resource>
                 <directory>apps/server/src/main/resources</directory>
@@ -81,6 +80,15 @@
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>3.4.2</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addClasspath>true</addClasspath>
+                                <classpathPrefix>lib/</classpathPrefix>
+                                <mainClass>com.extrcproject.App</mainClass>
+                            </manifest>
+                        </archive>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>

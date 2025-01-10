@@ -14,7 +14,7 @@ import com.extrcproject.core.util.Symbol;
 public class DefeasibleImplication extends Implication {
 
     /**
-     * Creates a new implication a~>b with the two given formulas
+     * Creates a new defeasible implication a~>b with the two given formulas
      *
      * @param a A propositional formula.
      * @param b A propositional formula.

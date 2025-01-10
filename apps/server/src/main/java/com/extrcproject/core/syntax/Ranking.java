@@ -5,6 +5,8 @@ import java.util.Collection;
 
 /**
  * This class represents ranking of formulas.
+ * 
+ * @author Thabo Vincent Moloi
  */
 public class Ranking extends ArrayList<Rank> {
 

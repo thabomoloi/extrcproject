@@ -9,16 +9,12 @@ import org.tweetyproject.logics.pl.syntax.PlFormula;
  *
  * @author Thabo Vincent Moloi
  */
-public class Rank {
+public class Rank extends KnowledgeBase {
 
     /**
      * Represents the rank number.
      */
     private int rankNumber;
-    /**
-     * Represents rank formulas.
-     */
-    private KnowledgeBase formulas;
 
     /**
      * Creates a new (empty) rank 0.
@@ -34,7 +30,7 @@ public class Rank {
      * @param formulas A set of formulas.
      */
     public Rank(int rankNumber, Collection<? extends PlFormula> formulas) {
-        this.formulas = new KnowledgeBase(formulas);
+        super(formulas);
         this.rankNumber = rankNumber;
     }
 
@@ -44,8 +40,9 @@ public class Rank {
      * @param rank Ranked knowledge base.
      */
     public Rank(Rank rank) {
-        this.formulas = new KnowledgeBase(rank.formulas);
+        super(rank);
         this.rankNumber = rank.rankNumber;
+
     }
 
     /**
@@ -64,12 +61,5 @@ public class Rank {
      */
     public void setRankNumber(int rankNumber) {
         this.rankNumber = rankNumber;
-    }
-
-    /**
-     * Get formulas from this rank as a knowledge base.
-     */
-    public KnowledgeBase getFormulas() {
-        return formulas;
     }
 }

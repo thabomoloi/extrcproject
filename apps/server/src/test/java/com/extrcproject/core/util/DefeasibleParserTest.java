@@ -36,6 +36,7 @@ public class DefeasibleParserTest {
         assertEquals(expected, parsedFormula.toString().replaceAll("[()]", ""), "Parsed formula does not match expected output.");
     }
 
+    @SuppressWarnings("unused")
     private static Stream<Arguments> provideValidFormulas() {
         return Stream.of(
                 Arguments.of("p", "p"),
@@ -53,6 +54,7 @@ public class DefeasibleParserTest {
         assertTrue(exception.getMessage().contains("Cannot parse formula"));
     }
 
+    @SuppressWarnings("unused")
     private static Stream<Arguments> provideInvalidFormulas() {
         return Stream.of(
                 Arguments.of("p &&"),
@@ -65,7 +67,7 @@ public class DefeasibleParserTest {
     void testParseValidFormulas() throws Exception {
         String formulas = "p, q, p && q, p || q, p => q, p ~> q, p <=> q";
         KnowledgeBase expected = getValiKnowledgeBase();
-        KnowledgeBase actual = defeasibleParser.parseFormulas(formulas);
+        var actual = defeasibleParser.parseFormulas(formulas);
         assertEquals(expected, actual);
     }
 

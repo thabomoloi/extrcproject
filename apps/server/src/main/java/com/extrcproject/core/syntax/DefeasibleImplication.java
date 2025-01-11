@@ -32,6 +32,47 @@ public class DefeasibleImplication extends Implication {
         super(formulas);
     }
 
+    /*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((getFormulas() == null) ? 0 : getFormulas().hashCode());
+        return result;
+    }
+
+    
+    /*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        DefeasibleImplication other = (DefeasibleImplication) obj;
+        if (this.getFormulas() == null) {
+            if (other.getFormulas() != null) {
+                return false;
+            }
+        } else if (!this.getFormulas().equals(other.getFormulas())) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         return super.toString().replaceAll(Symbol.IMPLICATION(), Symbol.DEFEASIBLE_IMPLICATION());

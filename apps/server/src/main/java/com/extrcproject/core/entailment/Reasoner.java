@@ -13,14 +13,17 @@ import com.extrcproject.core.syntax.Ranking;
 public abstract class Reasoner {
 
     protected final SatReasoner reasoner;
+    protected final Algorithm algorithm;
 
     /**
      * Create a new reasoner.
      *
-     * @param reasoner SAT Reasoner
+     * @param algorithm Entailment algorithm.
+     * @param reasoner SAT Reasoner.
      */
-    public Reasoner(SatReasoner reasoner) {
+    public Reasoner(Algorithm algorithm, SatReasoner reasoner) {
         this.reasoner = reasoner;
+        this.algorithm = algorithm;
     }
 
     /**

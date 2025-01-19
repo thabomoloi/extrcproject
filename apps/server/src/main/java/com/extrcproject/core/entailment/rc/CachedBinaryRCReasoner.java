@@ -12,28 +12,29 @@ import com.extrcproject.core.syntax.KnowledgeBase;
 import com.extrcproject.core.syntax.Ranking;
 
 /**
- * Represent a cached reasoner using naive rational closure algorithm.
+ * Defines a reasoner using binary search and caching to determine the minimal
+ * rank required to entail a defeasible implication using Rational Closure.
  *
- * @author Maqhobosheane Mohlerepe
  * @author Thabo Vincent Moloi
+ * @author Maqhobosheane Mohlerepe
  */
-public class CachedNaiveRCReasoner extends RCReasoner {
+public class CachedBinaryRCReasoner extends RCReasoner {
 
     protected final Cache<RCEntailmentResult> entailmentResultCache;
     protected final Cache<Ranking> finalRanksCache;
 
     /**
-     * Create new cached reasoner using naive rational closure algorithm.
+     * Create new Rational closure reasoner using Binary search.
      *
-     * @param reasoner SAT Reasoner.
+     * @param reasoner
      * @param queryResultCache Cache containing final results.
      * @param finalRanksCache Cache containing final ranks.
      */
-    public CachedNaiveRCReasoner(SatReasoner reasoner, Cache<RCEntailmentResult> entailmentResultCache, Cache<Ranking> finalRanksCache) {
+    public CachedBinaryRCReasoner(SatReasoner reasoner, Cache<RCEntailmentResult> entailmentResultCache, Cache<Ranking> finalRanksCache) {
         super(reasoner);
         this.entailmentResultCache = entailmentResultCache;
         this.finalRanksCache = finalRanksCache;
-        algorithmType = Algorithm.Type.CACHED_NAIVE;
+        algorithmType = Algorithm.Type.CACHED_BINARY;
     }
 
     @Override
@@ -46,7 +47,6 @@ public class CachedNaiveRCReasoner extends RCReasoner {
             return entailmentResultCache.get(formula, union);
         }
 
-        // Negation of antecedent
         PlFormula negation = new Negation(((Implication) formula).getFirstFormula());
 
         // Final ranking
@@ -54,22 +54,14 @@ public class CachedNaiveRCReasoner extends RCReasoner {
         if (finalRanksCache.contains(negation, union)) {
             // If final ranks are cached get and find removed ranks
             finalRanking = finalRanksCache.get(negation, union);
-            union = finalRanking.unionAll();
         } else {
-            finalRanking = new Ranking(ranking);
-            int i = 0;
-            while (!union.isEmpty() && reasoner.query(union, negation) && i < ranking.size() - 1) {
-                // Remove exceptional formulas
-                finalRanking.remove(ranking.get(i));
-                union.removeAll(ranking.get(i));
-                i++;
-            }
+            finalRanking = ranking.subRanking(findLowestRank(formula, ranking), ranking.size());
         }
-
-        // Check entailment
-        boolean entailed = !union.isEmpty() && reasoner.query(union, formula);
-        Ranking removedRanking = new Ranking(ranking);
+        // Removed ranks
+        Ranking removedRanking = (new Ranking(ranking));
         removedRanking.removeAll(finalRanking);
+
+        boolean entailed = reasoner.query(finalRanking.unionAll(), formula);
 
         var entailmentResult = new RCEntailmentResult(algorithmType, entailed, removedRanking);
 
@@ -81,4 +73,34 @@ public class CachedNaiveRCReasoner extends RCReasoner {
         return entailmentResult;
     }
 
+    private int findLowestRank(PlFormula formula, Ranking ranking) {
+        int high = ranking.size() - 1;
+        int low = 0;
+
+        // Negation of antecedent
+        PlFormula negation = new Negation(((Implication) formula).getFirstFormula());
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            // Check if removing ranks from mid+1 to high results in consistency with the negated antecedent
+            KnowledgeBase upperRankKb = ranking.subRanking(mid, ranking.size()).unionAll();
+            KnowledgeBase prevRank = mid > 0 ? ranking.get(mid - 1) : new KnowledgeBase();
+
+            // Check if the negated antecedent is consistent
+            boolean consistent = reasoner.query(upperRankKb, negation);
+            boolean consistentWithPrevRank = reasoner.query(upperRankKb.union(prevRank), negation);
+
+            if (!consistent && consistentWithPrevRank) {
+                return mid;
+            } else if (consistent) {
+                // Negated antecedent consistent: search upper half
+                low = mid + 1;
+            } else {
+                // Negated antecedent consistent: search lower half
+                high = mid - 1;
+            }
+        }
+        return 0;
+    }
 }

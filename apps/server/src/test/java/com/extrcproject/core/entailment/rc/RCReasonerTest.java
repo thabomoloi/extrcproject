@@ -87,6 +87,14 @@ public abstract class RCReasonerTest {
         assertEquals(2, entailmentResult.getRemovedRanking().get(0).size()); // Rank 0 has two formulas
     }
 
+    @Test
+    public void testRanks10() throws Exception {
+        EntailmentResult entailmentResult = computeEntailmentResult("18 ~> 16", "test-ranks-10.txt");
+
+        assertTrue(entailmentResult.getEntailed());
+        assertEquals(8, entailmentResult.getRemovedRanking().size());  // 8 Ranks removed
+    }
+
     private EntailmentResult computeEntailmentResult(String formula, String knowledgeBaseFile) throws Exception {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(knowledgeBaseFile);
         KnowledgeBase kb = parser.parseInputStream(inputStream);

@@ -1,10 +1,12 @@
 package com.extrcproject.core.baserank;
 
+import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
 import org.tweetyproject.logics.pl.reasoner.SatReasoner;
 import org.tweetyproject.logics.pl.syntax.Negation;
+import org.tweetyproject.logics.pl.syntax.PlFormula;
 
 import com.extrcproject.core.syntax.KnowledgeBase;
 
@@ -25,9 +27,9 @@ public class ThreadedBaseRank extends BaseRankAlgorithm {
         private final int end;
         private final int threshold;
         private final KnowledgeBase knowledgeBase;
-        private final KnowledgeBase antecedents;
+        private final List<PlFormula> antecedents;
 
-        public ExceptionalsTask(KnowledgeBase knowledgeBase, int start, int end, int threshold, KnowledgeBase antecedants) {
+        public ExceptionalsTask(KnowledgeBase knowledgeBase, int start, int end, int threshold, List<PlFormula> antecedants) {
             this.start = start;
             this.end = end;
             this.threshold = threshold;
@@ -39,16 +41,17 @@ public class ThreadedBaseRank extends BaseRankAlgorithm {
         protected KnowledgeBase compute() {
             if ((end - start) <= threshold) {
                 KnowledgeBase exceptionals = new KnowledgeBase();
-                antecedents.forEach((antecedent) -> {
+                for (int i = start; i <= end; i++) {
+                    PlFormula antecedent = antecedents.get(i);
                     if (reasoner.query(knowledgeBase, new Negation(antecedent))) {
                         exceptionals.add(antecedent);
                     }
-                });
+                }
                 return exceptionals;
             } else {
                 int mid = start + (end - start) / 2;
                 ExceptionalsTask lower = new ExceptionalsTask(knowledgeBase, start, mid, threshold, antecedents);
-                ExceptionalsTask upper = new ExceptionalsTask(knowledgeBase, start, mid, threshold, antecedents);
+                ExceptionalsTask upper = new ExceptionalsTask(knowledgeBase, mid + 1, end, threshold, antecedents);
                 upper.fork();
                 KnowledgeBase exceptionals = lower.compute();
                 exceptionals.addAll(upper.join());
@@ -70,8 +73,8 @@ public class ThreadedBaseRank extends BaseRankAlgorithm {
     @Override
     protected KnowledgeBase getExceptionals(KnowledgeBase defeasible, KnowledgeBase classical) {
         KnowledgeBase all = defeasible.union(classical);
-        KnowledgeBase antecedents = defeasible.antecedents();
-        ExceptionalsTask exceptionalsTask = new ExceptionalsTask(all, 0, antecedents.size(), Math.max(antecedents.size() / 6, 1), antecedents);
+        List<PlFormula> antecedents = defeasible.antecedents().getCanonicalOrdering();
+        ExceptionalsTask exceptionalsTask = new ExceptionalsTask(all, 0, antecedents.size() - 1, Math.max(antecedents.size() / 6, 1), antecedents);
         try (ForkJoinPool pool = new ForkJoinPool()) {
             return pool.invoke(exceptionalsTask);
         }

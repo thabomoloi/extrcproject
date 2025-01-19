@@ -3,6 +3,7 @@ package com.extrcproject.core.baserank;
 import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -96,6 +97,16 @@ public abstract class BaseRankTest {
         assertEquals(2, baseRankResult.getRanking().size());
         assertEquals(5, baseRankResult.getRanking().get(0).size());
         assertEquals(1, baseRankResult.getRanking().get(1).size()); // infinite rank
+    }
+
+    @Test
+    public void testRanks10() throws Exception {
+        BaseRankResult baseRankResult = computeBaseRankResult("test-ranks-10.txt");
+
+        assertNotNull(baseRank);
+        // Plus 1 empty infinite rank
+        assertEquals(11, baseRankResult.getSequence().size());
+        assertEquals(11, baseRankResult.getRanking().size());
     }
 
     private BaseRankResult computeBaseRankResult(String knowledgeBaseFile) throws Exception {

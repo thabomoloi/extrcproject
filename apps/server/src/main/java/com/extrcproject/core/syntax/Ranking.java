@@ -5,7 +5,7 @@ import java.util.Collection;
 
 /**
  * This class represents ranking of formulas.
- * 
+ *
  * @author Thabo Vincent Moloi
  */
 public class Ranking extends ArrayList<Rank> {
@@ -47,6 +47,14 @@ public class Ranking extends ArrayList<Rank> {
             return this.get(this.size() - 1);
         }
         return this.get(rankNumber);
+    }
+
+    public KnowledgeBase unionAll() {
+        KnowledgeBase union = new KnowledgeBase();
+        for (Rank rank : this) {
+            union.addAll(rank);
+        }
+        return union;
     }
 
 }

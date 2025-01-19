@@ -10,7 +10,6 @@ import com.extrcproject.core.syntax.Ranking;
 public abstract class EntailmentResult {
 
     protected final boolean entailed;
-    protected final Ranking finalRanking;
     protected final Ranking removedRanking;
     protected Algorithm algorithm;
 
@@ -20,12 +19,10 @@ public abstract class EntailmentResult {
      * Create new entailment result.
      *
      * @param entailed Result (boolean) from entailment checking.
-     * @param finalRanking The final ranks.
      * @param removedRanking Removed ranks.
      */
-    public EntailmentResult(boolean entailed, Ranking finalRanking, Ranking removedRanking) {
+    public EntailmentResult(boolean entailed, Ranking removedRanking) {
         this.entailed = entailed;
-        this.finalRanking = finalRanking;
         this.removedRanking = removedRanking;
         this.timeTaken = 0;
         this.algorithm = new Algorithm();
@@ -37,7 +34,7 @@ public abstract class EntailmentResult {
      * @param entailmentResult Entailment result to copy.
      */
     public EntailmentResult(EntailmentResult entailmentResult) {
-        this(entailmentResult.entailed, new Ranking(entailmentResult.finalRanking), new Ranking(entailmentResult.removedRanking));
+        this(entailmentResult.entailed, new Ranking(entailmentResult.removedRanking));
         this.timeTaken = entailmentResult.timeTaken;
         this.algorithm = entailmentResult.algorithm;
     }
@@ -49,15 +46,6 @@ public abstract class EntailmentResult {
      */
     public boolean getEntailed() {
         return entailed;
-    }
-
-    /**
-     * Get the final ranking.
-     *
-     * @return Final ranks.
-     */
-    public Ranking getFinalRanking() {
-        return finalRanking;
     }
 
     /**

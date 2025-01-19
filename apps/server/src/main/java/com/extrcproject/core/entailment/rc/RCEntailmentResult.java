@@ -14,11 +14,10 @@ public class RCEntailmentResult extends EntailmentResult {
      *
      * @param algorithmType Type of rational closure algorithm.
      * @param entailed Result (boolean) from entailment checking.
-     * @param finalRanking The final ranks.
      * @param removedRanking The removed ranks.
      */
-    public RCEntailmentResult(Algorithm.Type algorithmType, boolean entailed, Ranking finalRanking, Ranking removedRanking) {
-        super(entailed, finalRanking, removedRanking);
+    public RCEntailmentResult(Algorithm.Type algorithmType, boolean entailed, Ranking removedRanking) {
+        super(entailed, removedRanking);
         this.algorithm = new Algorithm(Algorithm.Name.RATIONAL_CLOSURE, algorithmType);
     }
 

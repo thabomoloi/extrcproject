@@ -3,7 +3,6 @@ package com.extrcproject.core.baserank;
 import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -30,18 +29,14 @@ public abstract class BaseRankTest {
         KnowledgeBase kb = new KnowledgeBase();
         BaseRankResult baseRankResult = baseRank.computeBaseRank(kb);
 
-        assertNotNull(baseRank);
         assertEquals(0, baseRankResult.getSequence().size());
         assertTrue(baseRankResult.getRanking().getLast().isEmpty());
     }
 
     @Test
     public void testDefeasibleAndClassical() throws Exception {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("test-defeasible-and-classical.txt");
-        KnowledgeBase kb = parser.parseInputStream(inputStream);
-        BaseRankResult baseRankResult = baseRank.computeBaseRank(kb);
+        BaseRankResult baseRankResult = computeBaseRankResult("test-defeasible-and-classical.txt");
 
-        assertNotNull(baseRank);
         assertEquals(3, baseRankResult.getSequence().size());
         assertEquals(3, baseRankResult.getSequence().get(0).size());
         assertEquals(1, baseRankResult.getSequence().get(1).size());
@@ -55,11 +50,8 @@ public abstract class BaseRankTest {
 
     @Test
     public void testDefeasibleOnly() throws Exception {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("test-defeasible-only.txt");
-        KnowledgeBase kb = parser.parseInputStream(inputStream);
-        BaseRankResult baseRankResult = baseRank.computeBaseRank(kb);
+        BaseRankResult baseRankResult = computeBaseRankResult("test-defeasible-only.txt");
 
-        assertNotNull(baseRank);
         assertEquals(3, baseRankResult.getSequence().size());
         assertEquals(4, baseRankResult.getSequence().get(0).size());
         assertEquals(2, baseRankResult.getSequence().get(1).size());
@@ -73,11 +65,8 @@ public abstract class BaseRankTest {
 
     @Test
     public void testClassicalOnly() throws Exception {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("test-classical-only.txt");
-        KnowledgeBase kb = parser.parseInputStream(inputStream);
-        BaseRankResult baseRankResult = baseRank.computeBaseRank(kb);
+        BaseRankResult baseRankResult = computeBaseRankResult("test-classical-only.txt");
 
-        assertNotNull(baseRank);
         assertEquals(0, baseRankResult.getSequence().size());
 
         assertEquals(1, baseRankResult.getRanking().size());
@@ -86,16 +75,32 @@ public abstract class BaseRankTest {
 
     @Test
     public void testDefeasibleButClassical() throws Exception {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("test-defeasible-but-classical.txt");
-        KnowledgeBase kb = parser.parseInputStream(inputStream);
-        BaseRankResult baseRankResult = baseRank.computeBaseRank(kb);
+        BaseRankResult baseRankResult = computeBaseRankResult("test-defeasible-but-classical.txt");
 
-        assertNotNull(baseRank);
         assertEquals(1, baseRankResult.getSequence().size());
         assertEquals(3, baseRankResult.getSequence().get(0).size()); // infinite element
 
         assertEquals(1, baseRankResult.getRanking().size());
         assertEquals(3, baseRankResult.getRanking().get(0).size()); // infinite rank
+    }
+
+    @Test
+    public void testNoExceptionalFormulas() throws Exception {
+        BaseRankResult baseRankResult = computeBaseRankResult("test-no-exceptions.txt");
+
+        assertEquals(2, baseRankResult.getSequence().size());
+        assertEquals(5, baseRankResult.getSequence().get(0).size());
+        assertEquals(0, baseRankResult.getSequence().get(1).size()); // infinite element
+
+        assertEquals(2, baseRankResult.getRanking().size());
+        assertEquals(5, baseRankResult.getRanking().get(0).size());
+        assertEquals(1, baseRankResult.getRanking().get(1).size()); // infinite rank
+    }
+
+    private BaseRankResult computeBaseRankResult(String knowledgeBaseFile) throws Exception {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(knowledgeBaseFile);
+        KnowledgeBase kb = parser.parseInputStream(inputStream);
+        return baseRank.computeBaseRank(kb);
     }
 
 }

@@ -2,7 +2,6 @@ package com.extrcproject.core.entailment.rc;
 
 import org.tweetyproject.logics.pl.reasoner.SatReasoner;
 
-import com.extrcproject.core.entailment.Algorithm;
 import com.extrcproject.core.entailment.Reasoner;
 
 /**
@@ -13,10 +12,9 @@ public abstract class RCReasoner extends Reasoner {
     /**
      * Create new Rational closure reasoner.
      *
-     * @param algorithmType Type of rational closure.
      * @param reasoner SAT Reasoner.
      */
-    public RCReasoner(Algorithm.Type algorithmType, SatReasoner reasoner) {
-        super(new Algorithm(Algorithm.Name.RATIONAL_CLOSURE, algorithmType), reasoner);
+    public RCReasoner(SatReasoner reasoner) {
+        super(reasoner);
     }
 }

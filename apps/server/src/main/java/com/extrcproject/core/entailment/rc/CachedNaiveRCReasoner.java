@@ -53,6 +53,7 @@ public class CachedNaiveRCReasoner extends RCReasoner {
         Ranking removedRanking;
 
         if (finalRanksCache.contains(negation, union)) {
+            // If final ranks are cached get and find removed ranks
             removedRanking = new Ranking(ranking);
             Ranking finalRanking = finalRanksCache.get(negation, union);
             removedRanking.removeAll(finalRanking);

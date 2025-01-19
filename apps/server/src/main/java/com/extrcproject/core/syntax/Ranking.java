@@ -49,12 +49,28 @@ public class Ranking extends ArrayList<Rank> {
         return this.get(rankNumber);
     }
 
+    /**
+     * Combines all the ranks as one knowledge base.
+     *
+     * @return Combined ranks.
+     */
     public KnowledgeBase unionAll() {
         KnowledgeBase union = new KnowledgeBase();
         for (Rank rank : this) {
             union.addAll(rank);
         }
         return union;
+    }
+
+    /**
+     * Returns portion of this ranking the specified start, inclusive, and end
+     *
+     * @param start
+     * @param end
+     * @return Selected sub ranking.
+     */
+    public Ranking subRanking(int start, int end) {
+        return new Ranking(this.subList(start, end));
     }
 
 }

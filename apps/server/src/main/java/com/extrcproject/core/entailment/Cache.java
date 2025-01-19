@@ -5,23 +5,23 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.extrcproject.core.syntax.DefeasibleImplication;
+import org.tweetyproject.logics.pl.syntax.PlFormula;
+
 import com.extrcproject.core.syntax.KnowledgeBase;
-import com.extrcproject.core.syntax.QueryResult;
 
 /**
  * Defines cache for adding and removing items from cache.
  *
  * @author Thabo Vincent Moloi
  */
-public class Cache {
+public class Cache<T> {
 
     /**
      * Represent item to add to cache with the timestamp it was added.
      */
     private class CacheItem {
 
-        private final QueryResult value;
+        private final T value;
         private final Instant timestamp;
 
         /**
@@ -29,7 +29,7 @@ public class Cache {
          *
          * @param value The query result
          */
-        public CacheItem(QueryResult value) {
+        public CacheItem(T value) {
             this.value = value;
             this.timestamp = Instant.now();
         }
@@ -44,7 +44,7 @@ public class Cache {
      * @param knowledgeBase
      * @return true if the query result exists, else false.
      */
-    public synchronized boolean contains(DefeasibleImplication formula, KnowledgeBase knowledgeBase) {
+    public synchronized boolean contains(PlFormula formula, KnowledgeBase knowledgeBase) {
         return cache.containsKey(generateKey(formula, knowledgeBase));
     }
 
@@ -55,7 +55,7 @@ public class Cache {
      * @param knowledgeBase
      * @param queryResult
      */
-    public synchronized void put(DefeasibleImplication formula, KnowledgeBase knowledgeBase, QueryResult queryResult) {
+    public synchronized void put(PlFormula formula, KnowledgeBase knowledgeBase, T queryResult) {
         cache.put(generateKey(formula, knowledgeBase), new CacheItem(queryResult));
     }
 
@@ -64,9 +64,9 @@ public class Cache {
      *
      * @param formula
      * @param knowledgeBase
-     * @return QueryResult
+     * @return T
      */
-    public synchronized QueryResult get(DefeasibleImplication formula, KnowledgeBase knowledgeBase) {
+    public synchronized T get(PlFormula formula, KnowledgeBase knowledgeBase) {
         String key = generateKey(formula, knowledgeBase);
         CacheItem item = cache.get(key);
         if (item == null) {
@@ -102,7 +102,7 @@ public class Cache {
         cache.clear();
     }
 
-    private String generateKey(DefeasibleImplication formula, KnowledgeBase knowledgeBase) {
+    private String generateKey(PlFormula formula, KnowledgeBase knowledgeBase) {
         return formula + "::" + knowledgeBase;
     }
 

@@ -1,7 +1,7 @@
 package com.extrcproject.core.entailment.rc;
 
-import com.extrcproject.core.entailment.Algorithm;
-import com.extrcproject.core.entailment.EntailmentResult;
+import com.extrcproject.core.syntax.Algorithm;
+import com.extrcproject.core.syntax.EntailmentResult;
 import com.extrcproject.core.syntax.Ranking;
 
 /**

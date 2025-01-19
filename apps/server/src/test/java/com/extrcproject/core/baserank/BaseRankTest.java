@@ -10,6 +10,7 @@ import org.tweetyproject.logics.pl.reasoner.SatReasoner;
 import org.tweetyproject.logics.pl.sat.Sat4jSolver;
 import org.tweetyproject.logics.pl.sat.SatSolver;
 
+import com.extrcproject.core.syntax.BaseRankResult;
 import com.extrcproject.core.syntax.KnowledgeBase;
 import com.extrcproject.core.util.DefeasibleParser;
 

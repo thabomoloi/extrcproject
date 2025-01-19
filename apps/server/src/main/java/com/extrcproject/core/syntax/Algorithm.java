@@ -1,4 +1,4 @@
-package com.extrcproject.core.entailment;
+package com.extrcproject.core.syntax;
 
 /**
  * Represents list of entailment algorithms.
@@ -70,7 +70,11 @@ public class Algorithm {
      */
     public enum Type {
         NAIVE,
+        CACHED_NAIVE,
+        BINARY,
+        CACHED_BINARY,
         TERNARY,
+        CACHED_TERNARY,
         NO_TYPE
     }
 

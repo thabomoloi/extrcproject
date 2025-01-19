@@ -5,9 +5,10 @@ import org.tweetyproject.logics.pl.syntax.Implication;
 import org.tweetyproject.logics.pl.syntax.Negation;
 import org.tweetyproject.logics.pl.syntax.PlFormula;
 
-import com.extrcproject.core.entailment.Algorithm;
-import com.extrcproject.core.entailment.EntailmentResult;
 import com.extrcproject.core.entailment.Reasoner;
+import com.extrcproject.core.syntax.Algorithm;
+import com.extrcproject.core.syntax.DefeasibleImplication;
+import com.extrcproject.core.syntax.EntailmentResult;
 import com.extrcproject.core.syntax.KnowledgeBase;
 import com.extrcproject.core.syntax.Ranking;
 
@@ -25,10 +26,11 @@ public class NaiveRCReasoner extends Reasoner {
      */
     public NaiveRCReasoner(SatReasoner reasoner) {
         super(reasoner);
+        algorithmType = Algorithm.Type.NAIVE;
     }
 
     @Override
-    public EntailmentResult query(PlFormula formula, Ranking ranking) {
+    public EntailmentResult query(DefeasibleImplication formula, Ranking ranking) {
         // Negation of antecedent
         PlFormula negation = new Negation(((Implication) formula).getFirstFormula());
         // Rankings
@@ -47,7 +49,7 @@ public class NaiveRCReasoner extends Reasoner {
         // Check entailment
         boolean entailed = !union.isEmpty() && reasoner.query(union, formula);
 
-        return new RCEntailmentResult(Algorithm.Type.NAIVE, entailed, removedRanking);
+        return new RCEntailmentResult(algorithmType, entailed, removedRanking);
 
     }
 }

@@ -1,8 +1,10 @@
 package com.extrcproject.core.entailment;
 
 import org.tweetyproject.logics.pl.reasoner.SatReasoner;
-import org.tweetyproject.logics.pl.syntax.PlFormula;
 
+import com.extrcproject.core.syntax.Algorithm;
+import com.extrcproject.core.syntax.DefeasibleImplication;
+import com.extrcproject.core.syntax.EntailmentResult;
 import com.extrcproject.core.syntax.Ranking;
 
 /**
@@ -13,6 +15,7 @@ import com.extrcproject.core.syntax.Ranking;
 public abstract class Reasoner {
 
     protected final SatReasoner reasoner;
+    protected Algorithm.Type algorithmType;
 
     /**
      * Create a new reasoner.
@@ -21,6 +24,7 @@ public abstract class Reasoner {
      */
     public Reasoner(SatReasoner reasoner) {
         this.reasoner = reasoner;
+        this.algorithmType = Algorithm.Type.NO_TYPE;
     }
 
     /**
@@ -28,5 +32,5 @@ public abstract class Reasoner {
      *
      * @return Results from entailment checking.
      */
-    public abstract EntailmentResult query(PlFormula formula, Ranking ranking);
+    public abstract EntailmentResult query(DefeasibleImplication formula, Ranking ranking);
 }

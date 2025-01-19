@@ -3,6 +3,7 @@ package com.extrcproject.core.baserank;
 import org.tweetyproject.logics.pl.reasoner.SatReasoner;
 import org.tweetyproject.logics.pl.syntax.Implication;
 
+import com.extrcproject.core.syntax.BaseRankResult;
 import com.extrcproject.core.syntax.KnowledgeBase;
 import com.extrcproject.core.syntax.Rank;
 import com.extrcproject.core.syntax.Ranking;

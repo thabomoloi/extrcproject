@@ -1,5 +1,6 @@
 package com.extrcproject.core.baserank;
 
+import com.extrcproject.core.syntax.BaseRankResult;
 import com.extrcproject.core.syntax.KnowledgeBase;
 
 /**

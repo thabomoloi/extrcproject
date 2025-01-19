@@ -1,6 +1,4 @@
-package com.extrcproject.core.baserank;
-
-import com.extrcproject.core.syntax.Ranking;
+package com.extrcproject.core.syntax;
 
 /**
  * Represents result from the BaseRank Algorithm.

@@ -1,6 +1,4 @@
-package com.extrcproject.core.entailment;
-
-import com.extrcproject.core.syntax.Ranking;
+package com.extrcproject.core.syntax;
 
 /**
  * Represents results from entailment checking algorithm.

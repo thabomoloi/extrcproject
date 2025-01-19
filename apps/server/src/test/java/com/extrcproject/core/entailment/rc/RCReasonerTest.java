@@ -12,11 +12,12 @@ import org.tweetyproject.logics.pl.sat.Sat4jSolver;
 import org.tweetyproject.logics.pl.sat.SatSolver;
 
 import com.extrcproject.core.baserank.BaseRank;
-import com.extrcproject.core.baserank.BaseRankResult;
 import com.extrcproject.core.baserank.NaiveBaseRank;
-import com.extrcproject.core.entailment.Algorithm;
-import com.extrcproject.core.entailment.EntailmentResult;
 import com.extrcproject.core.entailment.Reasoner;
+import com.extrcproject.core.syntax.Algorithm;
+import com.extrcproject.core.syntax.BaseRankResult;
+import com.extrcproject.core.syntax.DefeasibleImplication;
+import com.extrcproject.core.syntax.EntailmentResult;
 import com.extrcproject.core.syntax.KnowledgeBase;
 import com.extrcproject.core.util.DefeasibleParser;
 
@@ -36,7 +37,7 @@ public abstract class RCReasonerTest {
     @Test
     public void testEmptyKnowledgeBase() throws Exception {
         BaseRankResult baseRankResult = baseRank.computeBaseRank(new KnowledgeBase());
-        EntailmentResult entailmentResult = reasoner.query(parser.parseFormula("p ~> q"), baseRankResult.getRanking());
+        EntailmentResult entailmentResult = reasoner.query((DefeasibleImplication) parser.parseFormula("p ~> q"), baseRankResult.getRanking());
 
         assertEquals(Algorithm.Name.RATIONAL_CLOSURE, entailmentResult.getAlgorithm().getName());
         assertEquals(algorithmType, entailmentResult.getAlgorithm().getType());
@@ -90,6 +91,6 @@ public abstract class RCReasonerTest {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(knowledgeBaseFile);
         KnowledgeBase kb = parser.parseInputStream(inputStream);
         BaseRankResult baseRankResult = baseRank.computeBaseRank(kb);
-        return reasoner.query(parser.parseFormula(formula), baseRankResult.getRanking());
+        return reasoner.query((DefeasibleImplication) parser.parseFormula(formula), baseRankResult.getRanking());
     }
 }

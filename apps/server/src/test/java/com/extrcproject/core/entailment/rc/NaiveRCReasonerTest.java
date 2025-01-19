@@ -2,7 +2,7 @@ package com.extrcproject.core.entailment.rc;
 
 import org.junit.jupiter.api.BeforeEach;
 
-import com.extrcproject.core.entailment.Algorithm;
+import com.extrcproject.core.syntax.Algorithm;
 
 public class NaiveRCReasonerTest extends RCReasonerTest {
 
